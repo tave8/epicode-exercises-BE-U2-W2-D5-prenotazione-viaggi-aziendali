@@ -1,16 +1,16 @@
+- La distinzione tra un viaggio e una prenotazione di un viaggio non mi è risultata chiara, dalla traccia
+
 - L'interpretazione della "data di richiesta" della prenotazione mi è risultata ambigua; significa "data prenotato PER" o "data prenotato IL"?
-- Un viaggio non dovrebbe contenere informazione temporale come la data del viaggio. Il QUANDO del viaggio è associato alla prenotazione di quel viaggio, non al viaggio.
-- Stessa cosa per lo stato del viaggio. Lo stato del viaggio è associato alla prenotazione del viaggio, non al viaggio.
-- Un viaggio ha più prenotazioni, e queste prenotazioni contengono i dettagli temporali del viaggio. 
-- Uno stesso viaggio (partenza e destinazione) può essere prenotato per più date da utenti diversi o dallo stesso utente, o per più date dallo stesso utente.
-- 
 
-Per tutti questi motivi, che riguardano l'interpretazione della traccia e le proprietà logiche dei dati, 
-e l'impossibilità di chiarire e poter ragionare con un'altra persona per ovvie restrizioni di tempo della consegna,
-ho perseguito questo design.
+- Un viaggio non dovrebbe contenere informazione temporale come la data del viaggio. 
+  Il QUANDO del viaggio è associato alla prenotazione di quel viaggio, non al viaggio.
+  Oppure per viaggio si intendeva in realtà una prenotazione di viaggio? Di nuovo, non c'è stato modo di definire la semantica esatta.
+
+- Da questa ambiguità e dall'impossibilità di poterla chiarire in modo esaustivo, ho definito che un viaggio ha una partenza e una destinazione, 
+  e una prenotazione di un viaggio contiene informazioni temporali del viaggio, quindi data per cui è stato prenotato il viaggio ecc.
 
 
-# Entità
+# Entità (design iniziale)
 
 ```
 
@@ -119,5 +119,3 @@ nelle prenotazioni:
 
 ```
 
-
-## ..domanda..
