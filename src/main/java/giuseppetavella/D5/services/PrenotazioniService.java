@@ -7,6 +7,8 @@ import giuseppetavella.D5.entities.Prenotazione;
 import giuseppetavella.D5.entities.Viaggio;
 import giuseppetavella.D5.exceptions.CaricamentoFileException;
 import giuseppetavella.D5.exceptions.NonTrovatoException;
+import giuseppetavella.D5.exceptions.PrenotazioneNonDisponibileException;
+import giuseppetavella.D5.exceptions.ValidazionePayloadException;
 import giuseppetavella.D5.payloads.in_request.NuovaPrenotazioneMandataDTO;
 import giuseppetavella.D5.payloads.in_request.NuovoDipendenteMandatoDTO;
 import giuseppetavella.D5.payloads.in_request.NuovoViaggioMandatoDTO;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -47,24 +50,76 @@ public class PrenotazioniService {
     //             .toList();
     // }
 
-    // public PrenotazioneDaMandareDTO aggiungiNuovaPrenotazione(NuovaPrenotazioneMandataDTO body) {
-    //    
-    //     // l'utente esiste?
-    //     Dipendente dipendente = this.dipendentiService.findById(body.dipendenteId());
-    //    
-    //     // il viaggio esiste?
-    //     Viaggio viaggio = this.viaggiService.
-    //    
-    //    
-    //     Prenotazione nuovaPrenotazione = new Prenotazione(
-    //             body.partenza(),
-    //             body.destinazione()
-    //     );
-    //
-    //     this.prenotazioniRepository.save(nuovaPrenotazione);
-    //
-    //     return new PrenotazioneDaMandareDTO(nuovaPrenotazione);
-    // }
+    public PrenotazioneDaMandareDTO aggiungiNuovaPrenotazione(NuovaPrenotazioneMandataDTO body) throws PrenotazioneNonDisponibileException, 
+                                                                                                        NonTrovatoException 
+    {
+        Dipendente dipendente;
+        Viaggio viaggio;
+        
+        // OTTIENI DIPENDENTE & VIAGGIO
+        
+        try {
+            // l'utente esiste?
+            dipendente = this.dipendentiService.findById(UUID.fromString(body.dipendenteId()));
+            
+            // il viaggio esiste?
+            viaggio = this.viaggiService.findById(UUID.fromString(body.viaggioId()));
+            
+        }  catch (IllegalArgumentException ex) {
+            throw new ValidazionePayloadException("gli ID devono essere valide stringhe UUID.");
+        }
+        
+        // siccome abbiamo creato un oggetto java non ancora dall'ORM
+        // significa che questa non è una vera prenotazione nel DB, ma
+        // un oggetto java, appunto. quindi avrà il suo campo ID nullo
+        Prenotazione potenzialePrenotazione = new Prenotazione(
+                viaggio,
+                dipendente,
+                body.dataPerCuiPrenotare()
+        );
+        
+        // VERIFICA SE DIPENDENTE PUO' PRENOTARE PER DATA
+        if(!this.puoPrenotare(potenzialePrenotazione)) {
+            throw new PrenotazioneNonDisponibileException(dipendente.getDipendenteId(), body.dataPerCuiPrenotare());
+        }
+        
+        
+        // AGGIUNGI LA PRENOTAZIONE
+        this.prenotazioniRepository.save(potenzialePrenotazione);
+        
+        
+        return new PrenotazioneDaMandareDTO(potenzialePrenotazione);
+
+    }
+    
+    
+    boolean puoPrenotare(Prenotazione potenzialePrenotazione) {
+        
+        // caso in cui l'ID della prenotazione esiste già:
+        // si assume che questo significhi che la prenotazione è già in database,
+        // per qualche motivo
+        if(potenzialePrenotazione.getPrenotazioneId() != null) {
+            throw new PrenotazioneNonDisponibileException(
+                    // ID dipendente
+                    potenzialePrenotazione.getDipendente().getDipendenteId(), 
+                    // data per cui prenotare
+                    potenzialePrenotazione.getDataPrenotatoPer(),
+                    // dettagli
+                    "Questa prenotazione ha un ID non nullo con valore '" 
+                            + potenzialePrenotazione.getPrenotazioneId() 
+                            + "' e questo non può verificarsi. Una POTENZIALE prenotazione non può avere un ID. "
+                            +"Accertarsi che la prenotazione non sia già nel database."
+            );
+        }
+        
+        return this.prenotazioniRepository.puoPrenotare(
+                potenzialePrenotazione.getDipendente().getDipendenteId(),
+                // per "data prenotato per" si intende la data per cui si 
+                // desidera prenotare
+                potenzialePrenotazione.getDataPrenotatoPer()
+        );
+        
+    }
 
 
     // public AuthorToSendDTO updateAuthor(UUID authorId, NewAuthorPayload body) {

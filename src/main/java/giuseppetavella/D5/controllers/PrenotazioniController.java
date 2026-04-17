@@ -43,40 +43,30 @@ public class PrenotazioniController {
     // }
 
 
-    // @PostMapping
-    // @ResponseStatus(HttpStatus.CREATED)
-    // public PrenotazioneDaMandareDTO addNewPrenotazione(@RequestBody @Validated NuovaPrenotazioneMandataDTO body,
-    //                                                 BindingResult validationResult)
-    // {
-    //
-    //     // check if validation errors
-    //     if (validationResult.hasErrors()) {
-    //         // here we get the errors 
-    //         List<String> errors = validationResult
-    //                 .getFieldErrors()
-    //                 .stream()
-    //                 .map(fieldError -> fieldError.getDefaultMessage())
-    //                 .toList();
-    //         // we throw the exception that is specific to payload validation
-    //         // this exception will then be handled by the appropriate
-    //         // exception handler at the framework level
-    //         throw new ValidazionePayloadException(errors);
-    //
-    //     }
-    //
-    //     return this.prenotazioniService.aggiungiNuovaPrenotazione(body);
-    // }
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public PrenotazioneDaMandareDTO addNewPrenotazione(@RequestBody @Validated NuovaPrenotazioneMandataDTO body,
+                                                    BindingResult validationResult)
+    {
 
+        // check if validation errors
+        if (validationResult.hasErrors()) {
+            // here we get the errors 
+            List<String> errors = validationResult
+                    .getFieldErrors()
+                    .stream()
+                    .map(fieldError -> fieldError.getDefaultMessage())
+                    .toList();
+            // we throw the exception that is specific to payload validation
+            // this exception will then be handled by the appropriate
+            // exception handler at the framework level
+            throw new ValidazionePayloadException(errors);
 
-    // @PostMapping("/{dipendenteId}/avatarImage")
-    // @ResponseStatus(HttpStatus.CREATED)
-    // public DipendenteDaMandareDTO uploadAuthorAvatarImage(
-    //         @RequestParam("profile_picture") MultipartFile file,
-    //         @PathVariable UUID dipendenteId)
-    // {
-    //
-    //     return this.dipendentiService.uploadAvatarImage(dipendenteId, file);
-    // }
+        }
+
+        return this.prenotazioniService.aggiungiNuovaPrenotazione(body);
+    }
+
 
 
     // @PutMapping("/{authorId}")

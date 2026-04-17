@@ -37,6 +37,14 @@ public class ErrorsHandler {
         String msg = "Errore durante il caricamento di un file. DETTAGLI: " + ex.getMessage();
         return new ErroriDaMandareDTO(msg);
     }
+
+
+    @ExceptionHandler(PrenotazioneNonDisponibileException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErroriDaMandareDTO handlePrenotazioneNonDisponibile(PrenotazioneNonDisponibileException ex) {
+        String msg = "Prenotazione non disponibile. DETTAGLI: " + ex.getMessage();
+        return new ErroriDaMandareDTO(msg);
+    }
     
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)

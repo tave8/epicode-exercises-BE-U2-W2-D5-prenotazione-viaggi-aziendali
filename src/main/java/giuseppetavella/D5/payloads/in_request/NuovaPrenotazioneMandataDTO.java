@@ -2,23 +2,23 @@ package giuseppetavella.D5.payloads.in_request;
 
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.cfg.defs.UUIDDef;
+import org.hibernate.validator.constraints.UUID;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 public record NuovaPrenotazioneMandataDTO(
 
+        @UUID(message = "viaggioId deve essere un valido UUID.")
         @NotBlank(message = "Manca il campo viaggioId.")
-        @Size(min = 3, max = 30, message = "La destinazione deve avere tra 3 e 30 caratteri.")
-        UUID viaggioId,
+        String viaggioId,
 
+        @UUID(message = "dipendenteId deve essere un valido UUID.")
         @NotBlank(message = "Manca il campo dipendenteId.")
-        @Size(min = 3, max = 30, message = "La partenza deve avere tra 3 e 30 caratteri.")
-        UUID dipendenteId,
+        String dipendenteId,
         
-        @NotBlank(message = "Manca il campo dataPrenotatoPer.")
+        @NotNull(message = "Manca il campo dataPerCuiPrenotare.")
         @Future(message = "La data per cui vuoi prenotare deve essere futura.")
-        LocalDate dataPrenotatoPer,
+        LocalDate dataPerCuiPrenotare,
         
         String note
 )
