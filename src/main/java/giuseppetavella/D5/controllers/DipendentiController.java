@@ -1,6 +1,7 @@
 package giuseppetavella.D5.controllers;
 
 
+import giuseppetavella.D5.entities.Dipendente;
 import giuseppetavella.D5.exceptions.ValidazionePayloadException;
 import giuseppetavella.D5.payloads.in_request.NuovoDipendenteMandatoDTO;
 import giuseppetavella.D5.payloads.in_response.DipendenteDaMandareDTO;
@@ -29,11 +30,11 @@ public class DipendentiController {
         return this.dipendentiService.findAll();
     }
 
-    // @GetMapping("/{authorId}")
-    // public AuthorToSendDTO findById(@PathVariable UUID authorId) {
-    //     Author author = this.authorsService.findById(authorId);
-    //     return new AuthorToSendDTO(author);
-    // }
+    @GetMapping("/{dipendenteId}")
+    public DipendenteDaMandareDTO findById(@PathVariable UUID dipendenteId) {
+        Dipendente dipendente = this.dipendentiService.findById(dipendenteId);
+        return new DipendenteDaMandareDTO(dipendente);
+    }
 
 
     @PostMapping

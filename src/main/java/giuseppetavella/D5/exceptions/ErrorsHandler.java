@@ -38,7 +38,7 @@ public class ErrorsHandler {
     @ExceptionHandler(NoResourceFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErroriDaMandareDTO handleMissingRoute(NoResourceFoundException ex) {
-        String msg = "Questa risorsa sembra non esistere.";
+        String msg = "Questa risorsa sembra non esistere, o non esiste questo endpoint.";
         return new ErroriDaMandareDTO(msg);
     }
 
