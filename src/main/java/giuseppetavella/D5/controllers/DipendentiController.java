@@ -73,16 +73,5 @@ public class DipendentiController {
     }
 
 
-    // @PutMapping("/{authorId}")
-    // public Author update(@PathVariable String authorId, @RequestBody NewAuthorPayload body) {
-    //     return authorsService.update(authorId, body);
-    // }
-    //
-    //
-    // @DeleteMapping("/{authorId}")
-    // @ResponseStatus(HttpStatus.NO_CONTENT)
-    // public void delete(@PathVariable String authorId) {
-    //     authorsService.delete(authorId);
-    // }
 
 }
