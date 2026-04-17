@@ -42,13 +42,13 @@ public class PrenotazioniService {
     private ViaggiService viaggiService;
     
 
-    // public List<ViaggioDaMandareDTO> findAll() {
-    //     return this.viaggiRepository
-    //             .findAll()
-    //             .stream()
-    //             .map(viaggio -> new ViaggioDaMandareDTO(viaggio))
-    //             .toList();
-    // }
+    public List<PrenotazioneDaMandareDTO> findAll() {
+        return this.prenotazioniRepository
+                .findAll()
+                .stream()
+                .map(prenotazione -> new PrenotazioneDaMandareDTO(prenotazione))
+                .toList();
+    }
 
     public PrenotazioneDaMandareDTO aggiungiNuovaPrenotazione(NuovaPrenotazioneMandataDTO body) throws PrenotazioneNonDisponibileException, 
                                                                                                         NonTrovatoException 
@@ -75,7 +75,8 @@ public class PrenotazioniService {
         Prenotazione potenzialePrenotazione = new Prenotazione(
                 viaggio,
                 dipendente,
-                body.dataPerCuiPrenotare()
+                body.dataPerCuiPrenotare(),
+                body.note()
         );
         
         // VERIFICA SE DIPENDENTE PUO' PRENOTARE PER DATA

@@ -31,10 +31,10 @@ public class PrenotazioniController {
     private PrenotazioniService prenotazioniService;
 
 
-    // @GetMapping
-    // public List<ViaggioDaMandareDTO> findAll() {
-    //     return this.viaggiService.findAll();
-    // }
+    @GetMapping
+    public List<PrenotazioneDaMandareDTO> findAll() {
+        return this.prenotazioniService.findAll();
+    }
 
     // @GetMapping("/{dipendenteId}")
     // public DipendenteDaMandareDTO findById(@PathVariable UUID dipendenteId) {
