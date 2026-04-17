@@ -9,11 +9,11 @@ import java.time.LocalDate;
 
 public record NuovoViaggioMandatoDTO(
 
-        @NotBlank
+        @NotBlank(message = "Manca il campo destinazione.")
         @Size(min = 3, max = 30, message = "La destinazione deve avere tra 3 e 30 caratteri.")
         String destinazione,
 
-        @NotBlank
+        @NotBlank(message = "Manca il campo partenza.")
         @Size(min = 3, max = 30, message = "La partenza deve avere tra 3 e 30 caratteri.")
         String partenza
 )
