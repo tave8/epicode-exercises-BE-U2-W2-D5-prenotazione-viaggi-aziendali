@@ -22,6 +22,10 @@ import giuseppetavella.D5.repositories.DipendentiRepository;
 import giuseppetavella.D5.repositories.PrenotazioniRepository;
 import giuseppetavella.D5.repositories.ViaggiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,14 +47,26 @@ public class PrenotazioniService {
     
     @Autowired
     private ViaggiService viaggiService;
-    
 
-    public List<PrenotazioneDaMandareDTO> findAll() {
-        return this.prenotazioniRepository
-                .findAll()
-                .stream()
-                .map(prenotazione -> new PrenotazioneDaMandareDTO(prenotazione))
-                .toList();
+    
+    public Page<Prenotazione> findAll(int page, int size, String sortBy) {
+        // the size of each page (how many elements in each page)
+        int finalSize = Math.min(10, size);
+        // the page number
+        int finalPage = Math.max(0, page);
+        // page is the function that will get translated to SQL,
+        // that will in turn filter the result set
+        Pageable pageable = PageRequest.of(finalPage, finalSize, Sort.by(sortBy));
+        // fare map tra gli oggetti del content e quello che voglio tornare (rappresentazione)
+        return this.prenotazioniRepository.findAll(pageable);
+    }
+
+    /**
+     * Ritorna prenotazioni paginate.
+     */
+    public Page<PrenotazioneDaMandareDTO> findAllAsPayload(int page, int size, String sortBy) {
+        Page<Prenotazione> prenotazioniPaginate = this.findAll(page, size, sortBy);
+        return prenotazioniPaginate.map(prenotazione -> new PrenotazioneDaMandareDTO(prenotazione));
     }
     
 
@@ -154,27 +170,7 @@ public class PrenotazioniService {
         return this.prenotazioniRepository.save(prenotazione);
     }
 
-
-
-    // public DipendenteDaMandareDTO aggiornaDipendente(Dipendente dipendente) {
-    //     Dipendente dipendenteAggiornato = this.dipendentiRepository.save(dipendente);
-    //     return new DipendenteDaMandareDTO(dipendenteAggiornato);
-    // }
-    //
-    //
-    // public Author delete(String authorIdStr) {
-    //     Author author = this.findOne(authorIdStr);
-    //
-    //     this.authors.remove(author);
-    //
-    //     return author;
-    // }
-    //
-    //
-    //
-
-    //
-    //
+    
  
 
 }

@@ -16,6 +16,7 @@ import giuseppetavella.D5.services.PrenotazioniService;
 import giuseppetavella.D5.services.ViaggiService;
 import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -34,9 +35,17 @@ public class PrenotazioniController {
 
 
     @GetMapping
-    public List<PrenotazioneDaMandareDTO> findAll() {
-        return this.prenotazioniService.findAll();
+    public Page<PrenotazioneDaMandareDTO> findAllWithPagination(@RequestParam(defaultValue = "0") int page,
+                                                  @RequestParam(defaultValue = "10") int size,
+                                                  // FIX: il default value deve essere l'attributo dell'oggetto.
+                                                  // prima avevo scritto created_at e mi dice che "non trovava
+                                                  // la proprietà created sull'entità BlogPost". era un messaggio di errore non corretto,
+                                                  // perché sembra si fosse dimenticato la parte dopo l'underscore (_at)
+                                                  @RequestParam(defaultValue = "dataPrenotatoPer") String sortBy) 
+    {
+        return this.prenotazioniService.findAllAsPayload(page, size, sortBy);
     }
+    
 
     @GetMapping("/{prenotazioneId}")
     public PrenotazioneDaMandareDTO findById(@PathVariable UUID prenotazioneId) {
@@ -81,12 +90,6 @@ public class PrenotazioniController {
     
     }
     
-    //
-    //
-    // @DeleteMapping("/{authorId}")
-    // @ResponseStatus(HttpStatus.NO_CONTENT)
-    // public void delete(@PathVariable String authorId) {
-    //     authorsService.delete(authorId);
-    // }
+
 
 }
