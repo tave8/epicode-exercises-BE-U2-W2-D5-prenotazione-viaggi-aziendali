@@ -61,18 +61,18 @@ public class DipendentiController {
         return this.dipendentiService.aggiungiNuovoDipendente(body);
     }
     
-    //
-    // @PostMapping("/{authorId}/avatarImage")
-    // @ResponseStatus(HttpStatus.CREATED)
-    // public AuthorToSendDTO uploadAuthorAvatarImage(
-    //         @RequestParam("profile_picture") MultipartFile file,
-    //         @PathVariable UUID authorId)
-    // {
-    //
-    //     return this.authorsService.uploadAvatarImage(authorId, file);
-    // }
 
-    //
+    @PostMapping("/{dipendenteId}/avatarImage")
+    @ResponseStatus(HttpStatus.CREATED)
+    public DipendenteDaMandareDTO uploadAuthorAvatarImage(
+            @RequestParam("profile_picture") MultipartFile file,
+            @PathVariable UUID dipendenteId)
+    {
+
+        return this.dipendentiService.uploadAvatarImage(dipendenteId, file);
+    }
+
+
     // @PutMapping("/{authorId}")
     // public Author update(@PathVariable String authorId, @RequestBody NewAuthorPayload body) {
     //     return authorsService.update(authorId, body);

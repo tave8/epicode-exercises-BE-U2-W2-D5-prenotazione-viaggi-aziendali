@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.ArrayList;
@@ -27,6 +29,15 @@ public class ErrorsHandler {
     public ErroriDaMandareDTO handlePayloadValidationError(ValidazionePayloadException ex) {
         return new ErroriDaMandareDTO(ex.getMessage(), ex.getErrors());
     }
+
+
+    @ExceptionHandler(CaricamentoFileException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErroriDaMandareDTO handleCaricamentoFile(CaricamentoFileException ex) {
+        String msg = "Errore durante il caricamento di un file. DETTAGLI: " + ex.getMessage();
+        return new ErroriDaMandareDTO(msg);
+    }
+    
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -49,7 +60,22 @@ public class ErrorsHandler {
         return new ErroriDaMandareDTO(msg);
     }
 
+    @ExceptionHandler(MultipartException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErroriDaMandareDTO handleRequestIsNotMultipartRequest(MultipartException ex) {
+        String msg = "L'endpoint si aspetta che questa richiesta sia multipart formdata, "
+                +"ma sembra che non lo sia. Puoi provare ad impostare gli header "
+                +"della richiesta con content type multipart formdata?";
+        return new ErroriDaMandareDTO(msg);
+    }
 
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErroriDaMandareDTO handleRequestIsMissingPart(MissingServletRequestPartException ex) {
+        String msg = "L'endpoint si aspetta che questa richiesta abbia qualche parte nel multipart, "
+                +"ma sembra che non ci sia. DETTAGLI: " + ex.getMessage();
+        return new ErroriDaMandareDTO(msg);
+    }
     
     
     

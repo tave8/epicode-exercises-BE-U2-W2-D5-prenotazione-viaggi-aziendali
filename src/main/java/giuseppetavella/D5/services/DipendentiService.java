@@ -3,6 +3,7 @@ package giuseppetavella.D5.services;
 
 import com.cloudinary.Cloudinary;
 import giuseppetavella.D5.entities.Dipendente;
+import giuseppetavella.D5.exceptions.CaricamentoFileException;
 import giuseppetavella.D5.exceptions.NonTrovatoException;
 import giuseppetavella.D5.payloads.in_request.NuovoDipendenteMandatoDTO;
 import giuseppetavella.D5.payloads.in_response.DipendenteDaMandareDTO;
@@ -111,8 +112,8 @@ public class DipendentiService {
 
             avatarUrlAfterUpload = (String) result.get("secure_url");
 
-        } catch (IOException ex) {
-            throw new RuntimeException("error uploading avatar image");
+        } catch (IOException | RuntimeException ex) {
+            throw new CaricamentoFileException(ex.getMessage());
         }
 
         // get image url, if success
