@@ -50,17 +50,6 @@ public class DipendentiService {
     }
 
 
-    // public AuthorToSendDTO updateAuthor(UUID authorId, NewAuthorPayload body) {
-    //    
-    //     // Author author = this.findOne(authorIdStr);
-    //     //
-    //     // author.setNome(body.getNome());
-    //     // author.setCognome(body.getCognome());
-    //     // author.setEmail(body.getEmail());
-    //     // author.setDataNascita(body.getDataNascita());
-    //     //
-    //     // return author;
-    // }
 
     public DipendenteDaMandareDTO aggiornaDipendente(Dipendente dipendente) {
         Dipendente dipendenteAggiornato = this.dipendentiRepository.save(dipendente);
@@ -68,18 +57,7 @@ public class DipendentiService {
     }
 
 
-    //
-    //
-    // public Author delete(String authorIdStr) {
-    //     Author author = this.findOne(authorIdStr);
-    //
-    //     this.authors.remove(author);
-    //
-    //     return author;
-    // }
-    //
-    //
-    //
+
 
     public Dipendente findById(UUID dipendenteId) throws NonTrovatoException {
         Optional<Dipendente> maybeDipendente = this.dipendentiRepository.findById(dipendenteId);

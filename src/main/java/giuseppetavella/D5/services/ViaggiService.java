@@ -51,37 +51,7 @@ public class ViaggiService {
         return new ViaggioDaMandareDTO(nuovoViaggio);
     }
 
-
-    // public AuthorToSendDTO updateAuthor(UUID authorId, NewAuthorPayload body) {
-    //    
-    //     // Author author = this.findOne(authorIdStr);
-    //     //
-    //     // author.setNome(body.getNome());
-    //     // author.setCognome(body.getCognome());
-    //     // author.setEmail(body.getEmail());
-    //     // author.setDataNascita(body.getDataNascita());
-    //     //
-    //     // return author;
-    // }
-
-    // public DipendenteDaMandareDTO aggiornaDipendente(Dipendente dipendente) {
-    //     Dipendente dipendenteAggiornato = this.dipendentiRepository.save(dipendente);
-    //     return new DipendenteDaMandareDTO(dipendenteAggiornato);
-    // }
-
-
-    //
-    //
-    // public Author delete(String authorIdStr) {
-    //     Author author = this.findOne(authorIdStr);
-    //
-    //     this.authors.remove(author);
-    //
-    //     return author;
-    // }
-    //
-    //
-    //
+    
 
     public Viaggio findById(UUID viaggioId) throws NonTrovatoException {
         Optional<Viaggio> maybeViaggio = this.viaggiRepository.findById(viaggioId);
@@ -92,42 +62,5 @@ public class ViaggiService {
 
         return maybeViaggio.get();
     }
-    //
-    //
-    //
-    // public DipendenteDaMandareDTO uploadAvatarImage(UUID dipendenteId,
-    //                                                 MultipartFile avatarImage) throws NonTrovatoException {
-    //     //   check that the file is an actual image
-    //
-    //     //   find author
-    //     Dipendente dipendente = this.findById(dipendenteId);
-    //
-    //     String avatarUrlAfterUpload;
-    //
-    //     try {
-    //         // upload image to cloudinary
-    //         Map result = cloudinaryUploader
-    //                 .uploader()
-    //                 // get the bytes of the file. 
-    //                 // this is what we're going to upload to cloudinary
-    //                 .upload(avatarImage.getBytes(), Map.of());
-    //
-    //         avatarUrlAfterUpload = (String) result.get("secure_url");
-    //
-    //     } catch (IOException | RuntimeException ex) {
-    //         throw new CaricamentoFileException(ex.getMessage());
-    //     }
-    //
-    //     // get image url, if success
-    //
-    //     // System.out.println(avatarUrlAfterUpload);
-    //
-    //     // update author (with setter)
-    //     dipendente.setAvatarUrl(avatarUrlAfterUpload);
-    //
-    //     // save user      
-    //     return this.aggiornaDipendente(dipendente);
-    //
-    // }
 
 }
