@@ -2,6 +2,7 @@ package giuseppetavella.D5.exceptions;
 
 import giuseppetavella.D5.payloads.in_response.ErroriDaMandareDTO;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -40,6 +41,16 @@ public class ErrorsHandler {
         String msg = "Questa risorsa sembra non esistere.";
         return new ErroriDaMandareDTO(msg);
     }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErroriDaMandareDTO handleMaybeMissingBody(HttpMessageNotReadableException ex) {
+        String msg = "La richiesta non è ben formata; forse manca il body o i campi del body non sono ben formati?";
+        return new ErroriDaMandareDTO(msg);
+    }
+
+
+    
     
     
     @ExceptionHandler(Exception.class)
