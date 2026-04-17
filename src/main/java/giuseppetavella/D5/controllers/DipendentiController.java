@@ -24,10 +24,10 @@ public class DipendentiController {
     private DipendentiService dipendentiService;
 
 
-    // @GetMapping
-    // public List<DipendenteDaMandareDTO> findAll() {
-    //     return this.dipendentiService.findAll();
-    // }
+    @GetMapping
+    public List<DipendenteDaMandareDTO> findAll() {
+        return this.dipendentiService.findAll();
+    }
 
     // @GetMapping("/{authorId}")
     // public AuthorToSendDTO findById(@PathVariable UUID authorId) {
