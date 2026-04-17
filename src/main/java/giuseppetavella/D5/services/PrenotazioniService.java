@@ -49,6 +49,18 @@ public class PrenotazioniService {
                 .map(prenotazione -> new PrenotazioneDaMandareDTO(prenotazione))
                 .toList();
     }
+    
+
+    public Prenotazione findById(UUID prenotazioneId) throws NonTrovatoException {
+        Optional<Prenotazione> maybePrenotazione = this.prenotazioniRepository.findById(prenotazioneId);
+
+        if (maybePrenotazione.isEmpty()) {
+            throw new NonTrovatoException(prenotazioneId, "PRENOTAZIONE");
+        }
+
+        return maybePrenotazione.get();
+    }
+    
 
     public PrenotazioneDaMandareDTO aggiungiNuovaPrenotazione(NuovaPrenotazioneMandataDTO body) throws PrenotazioneNonDisponibileException, 
                                                                                                         NonTrovatoException 

@@ -2,6 +2,7 @@ package giuseppetavella.D5.controllers;
 
 
 import giuseppetavella.D5.entities.Dipendente;
+import giuseppetavella.D5.entities.Prenotazione;
 import giuseppetavella.D5.exceptions.ValidazionePayloadException;
 import giuseppetavella.D5.payloads.in_request.NuovaPrenotazioneMandataDTO;
 import giuseppetavella.D5.payloads.in_request.NuovoDipendenteMandatoDTO;
@@ -36,11 +37,11 @@ public class PrenotazioniController {
         return this.prenotazioniService.findAll();
     }
 
-    // @GetMapping("/{dipendenteId}")
-    // public DipendenteDaMandareDTO findById(@PathVariable UUID dipendenteId) {
-    //     Dipendente dipendente = this.dipendentiService.findById(dipendenteId);
-    //     return new DipendenteDaMandareDTO(dipendente);
-    // }
+    @GetMapping("/{prenotazioneId}")
+    public PrenotazioneDaMandareDTO findById(@PathVariable UUID prenotazioneId) {
+        Prenotazione prenotazione = this.prenotazioniService.findById(prenotazioneId);
+        return new PrenotazioneDaMandareDTO(prenotazione);
+    }
 
 
     @PostMapping
