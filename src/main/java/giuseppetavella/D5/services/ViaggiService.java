@@ -83,15 +83,15 @@ public class ViaggiService {
     //
     //
 
-    // public Dipendente findById(UUID dipendenteId) throws NonTrovatoException {
-    //     Optional<Dipendente> maybeDipendente = this.dipendentiRepository.findById(dipendenteId);
-    //
-    //     if (maybeDipendente.isEmpty()) {
-    //         throw new NonTrovatoException(dipendenteId, "DIPENDENTE");
-    //     }
-    //
-    //     return maybeDipendente.get();
-    // }
+    public Viaggio findById(UUID viaggioId) throws NonTrovatoException {
+        Optional<Viaggio> maybeViaggio = this.viaggiRepository.findById(viaggioId);
+
+        if (maybeViaggio.isEmpty()) {
+            throw new NonTrovatoException(viaggioId, "VIAGGIO");
+        }
+
+        return maybeViaggio.get();
+    }
     //
     //
     //

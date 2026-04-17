@@ -2,6 +2,7 @@ package giuseppetavella.D5.controllers;
 
 
 import giuseppetavella.D5.entities.Dipendente;
+import giuseppetavella.D5.entities.Viaggio;
 import giuseppetavella.D5.exceptions.ValidazionePayloadException;
 import giuseppetavella.D5.payloads.in_request.NuovoDipendenteMandatoDTO;
 import giuseppetavella.D5.payloads.in_request.NuovoViaggioMandatoDTO;
@@ -33,11 +34,12 @@ public class ViaggiController {
         return this.viaggiService.findAll();
     }
 
-    // @GetMapping("/{dipendenteId}")
-    // public DipendenteDaMandareDTO findById(@PathVariable UUID dipendenteId) {
-    //     Dipendente dipendente = this.dipendentiService.findById(dipendenteId);
-    //     return new DipendenteDaMandareDTO(dipendente);
-    // }
+    
+    @GetMapping("/{viaggioId}")
+    public ViaggioDaMandareDTO findById(@PathVariable UUID viaggioId) {
+        Viaggio viaggio = this.viaggiService.findById(viaggioId);
+        return new ViaggioDaMandareDTO(viaggio);
+    }
 
 
     @PostMapping
@@ -64,18 +66,7 @@ public class ViaggiController {
         return this.viaggiService.aggiungiNuovoViaggio(body);
     }
 
-
-    // @PostMapping("/{dipendenteId}/avatarImage")
-    // @ResponseStatus(HttpStatus.CREATED)
-    // public DipendenteDaMandareDTO uploadAuthorAvatarImage(
-    //         @RequestParam("profile_picture") MultipartFile file,
-    //         @PathVariable UUID dipendenteId)
-    // {
-    //
-    //     return this.dipendentiService.uploadAvatarImage(dipendenteId, file);
-    // }
-
-
+    
     // @PutMapping("/{authorId}")
     // public Author update(@PathVariable String authorId, @RequestBody NewAuthorPayload body) {
     //     return authorsService.update(authorId, body);
