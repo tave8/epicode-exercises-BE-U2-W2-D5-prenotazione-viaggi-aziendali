@@ -18,15 +18,15 @@ import java.util.List;
  *    to the relevant exception, by throwing this exception
  * 8. That's where this PayloadValidationException comes into play
  */
-public class PayloadValidationException extends RuntimeException {
+public class ValidazionePayloadException extends RuntimeException {
     private List<String> errors = new ArrayList<>();
-  
-    public PayloadValidationException(String message) {
+
+    public ValidazionePayloadException(String message) {
         super(message);
     }
 
-    public PayloadValidationException(List<String> errors) {
-       super("Payload validation error: At least 1 field is not valid.");
+    public ValidazionePayloadException(List<String> errors) {
+       super("Errore di validazione del payload: Almeno un campo non è valido..");
        this.errors = errors;
     }
 

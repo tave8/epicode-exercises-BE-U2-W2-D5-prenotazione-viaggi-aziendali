@@ -7,20 +7,23 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
-public record NewAuthorSentDTO(
+public record NuovoDipendenteMandatoDTO(
+        
         @NotBlank
-        @Size(min = 2, max = 30, message = "Il nome dell'autore deve avere tra 2 e 30 caratteri.")
+        @Size(min = 2, max = 30, message = "Il nome del dipendente deve avere tra 2 e 30 caratteri")
         String nome,
 
         @NotBlank
-        @Size(min = 2, max = 30, message = "Il cognome dell'autore deve avere tra 2 e 30 caratteri.")
+        @Size(min = 2, max = 30, message = "Il cognome del dipendente deve avere tra 2 e 30 caratteri.")
         String cognome, 
-        
+
         @Email(message = "L'email deve essere una email valida.")
-        String email, 
+        String email,
         
-        @Past(message = "La data di nascita deve essere passata.")
-        LocalDate dataNascita) 
+        @NotBlank
+        @Size(min = 4, max = 20, message = "Lo username deve avere tra 4 e 20 caratteri.")
+        String username
+) 
 {
 
 }

@@ -2,11 +2,11 @@ package giuseppetavella.D5.services;
 
 
 import com.cloudinary.Cloudinary;
-import giuseppetavella.web_api_blogging_image_upload.entities.Author;
-import giuseppetavella.web_api_blogging_image_upload.exceptions.NotFoundException;
-import giuseppetavella.web_api_blogging_image_upload.payloads.in_request.NewAuthorSentDTO;
-import giuseppetavella.web_api_blogging_image_upload.payloads.in_response.AuthorToSendDTO;
-import giuseppetavella.web_api_blogging_image_upload.repositories.AuthorsRepository;
+import giuseppetavella.D5.entities.Dipendente;
+import giuseppetavella.D5.exceptions.NonTrovatoException;
+import giuseppetavella.D5.payloads.in_request.NuovoDipendenteMandatoDTO;
+import giuseppetavella.D5.payloads.in_response.DipendenteDaMandareDTO;
+import giuseppetavella.D5.repositories.DipendentiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,38 +18,37 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class AuthorsService {
-    
+public class DipendentiService {
+
     @Autowired
-    private AuthorsRepository authorsRepository;
-    
+    private DipendentiRepository dipendentiRepository;
+
     @Autowired
     private Cloudinary cloudinaryUploader;
-    
-    public List<AuthorToSendDTO> findAll() {
-        return this.authorsRepository
+
+    public List<DipendenteDaMandareDTO> findAll() {
+        return this.dipendentiRepository
                 .findAll()
                 .stream()
-                .map(author -> new AuthorToSendDTO(author))
+                .map(dipendente -> new DipendenteDaMandareDTO(dipendente))
                 .toList();
     }
-    
-    public AuthorToSendDTO addNewAuthor(NewAuthorSentDTO body) {
-        // fai le verifiche qui prima di aggiungere l'autore
-        
-        Author newAuthor = new Author(
+
+    public DipendenteDaMandareDTO aggiungiNuovoDipendente(NuovoDipendenteMandatoDTO body) {
+
+        Dipendente nuovoDipendente = new Dipendente(
                 body.nome(),
                 body.cognome(),
                 body.email(),
-                body.dataNascita()
+                body.username()
         );
 
-        this.authorsRepository.save(newAuthor);
-        
-        return new AuthorToSendDTO(newAuthor);
+        this.dipendentiRepository.save(nuovoDipendente);
+
+        return new DipendenteDaMandareDTO(nuovoDipendente);
     }
-    
-    
+
+
     // public AuthorToSendDTO updateAuthor(UUID authorId, NewAuthorPayload body) {
     //    
     //     // Author author = this.findOne(authorIdStr);
@@ -61,13 +60,13 @@ public class AuthorsService {
     //     //
     //     // return author;
     // }
-    
-    public AuthorToSendDTO updateAuthor(Author author) {
-        Author updatedAuthor = this.authorsRepository.save(author);
-        return new AuthorToSendDTO(updatedAuthor);
+
+    public DipendenteDaMandareDTO aggiornaDipendente(Dipendente dipendente) {
+        Dipendente dipendenteAggiornato = this.dipendentiRepository.save(dipendente);
+        return new DipendenteDaMandareDTO(dipendenteAggiornato);
     }
-    
-    
+
+
     //
     //
     // public Author delete(String authorIdStr) {
@@ -80,28 +79,28 @@ public class AuthorsService {
     //
     //
     //
-    
-    public Author findById(UUID authorId) throws NotFoundException {
-        Optional<Author> maybeAuthor = this.authorsRepository.findById(authorId);
-        
-        if (maybeAuthor.isEmpty()) {
-            throw new NotFoundException(authorId, "autore");
+
+    public Dipendente findById(UUID dipendenteId) throws NonTrovatoException {
+        Optional<Dipendente> maybeDipendente = this.dipendentiRepository.findById(dipendenteId);
+
+        if (maybeDipendente.isEmpty()) {
+            throw new NonTrovatoException(dipendenteId, "DIPENDENTE");
         }
-        
-        return maybeAuthor.get();
+
+        return maybeDipendente.get();
     }
-    
-    
-    
-    public AuthorToSendDTO uploadAvatarImage(UUID authorId, 
-                                            MultipartFile avatarImage) throws NotFoundException {
+
+
+
+    public DipendenteDaMandareDTO uploadAvatarImage(UUID dipendenteId, 
+                                                    MultipartFile avatarImage) throws NonTrovatoException {
         //   check that the file is an actual image
-        
+
         //   find author
-        Author author = this.findById(authorId);
-        
+        Dipendente dipendente = this.findById(dipendenteId);
+
         String avatarUrlAfterUpload;
-        
+
         try {
             // upload image to cloudinary
             Map result = cloudinaryUploader
@@ -109,23 +108,23 @@ public class AuthorsService {
                     // get the bytes of the file. 
                     // this is what we're going to upload to cloudinary
                     .upload(avatarImage.getBytes(), Map.of());
-            
+
             avatarUrlAfterUpload = (String) result.get("secure_url");
-            
+
         } catch (IOException ex) {
             throw new RuntimeException("error uploading avatar image");
         }
-        
+
         // get image url, if success
 
         // System.out.println(avatarUrlAfterUpload);
-        
+
         // update author (with setter)
-        author.setAvatarUrl(avatarUrlAfterUpload);
-        
+        dipendente.setAvatarUrl(avatarUrlAfterUpload);
+
         // save user      
-        return this.updateAuthor(author);
-        
+        return this.aggiornaDipendente(dipendente);
+
     }
-    
+
 }
