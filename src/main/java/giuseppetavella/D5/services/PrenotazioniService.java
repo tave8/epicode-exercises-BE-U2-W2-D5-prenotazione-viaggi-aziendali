@@ -5,12 +5,15 @@ import com.cloudinary.Cloudinary;
 import giuseppetavella.D5.entities.Dipendente;
 import giuseppetavella.D5.entities.Prenotazione;
 import giuseppetavella.D5.entities.Viaggio;
+import giuseppetavella.D5.enums.StatoPrenotazione;
 import giuseppetavella.D5.exceptions.CaricamentoFileException;
 import giuseppetavella.D5.exceptions.NonTrovatoException;
 import giuseppetavella.D5.exceptions.PrenotazioneNonDisponibileException;
 import giuseppetavella.D5.exceptions.ValidazionePayloadException;
+import giuseppetavella.D5.helpers.EnumHelper;
 import giuseppetavella.D5.payloads.in_request.NuovaPrenotazioneMandataDTO;
 import giuseppetavella.D5.payloads.in_request.NuovoDipendenteMandatoDTO;
+import giuseppetavella.D5.payloads.in_request.NuovoStatoPrenotazioneMandatoDTO;
 import giuseppetavella.D5.payloads.in_request.NuovoViaggioMandatoDTO;
 import giuseppetavella.D5.payloads.in_response.DipendenteDaMandareDTO;
 import giuseppetavella.D5.payloads.in_response.PrenotazioneDaMandareDTO;
@@ -135,24 +138,28 @@ public class PrenotazioniService {
     }
 
 
-    // public AuthorToSendDTO updateAuthor(UUID authorId, NewAuthorPayload body) {
-    //    
-    //     // Author author = this.findOne(authorIdStr);
-    //     //
-    //     // author.setNome(body.getNome());
-    //     // author.setCognome(body.getCognome());
-    //     // author.setEmail(body.getEmail());
-    //     // author.setDataNascita(body.getDataNascita());
-    //     //
-    //     // return author;
-    // }
+    public Prenotazione aggiornaStatoPrenotazione(UUID prenotazioneId, 
+                                                  NuovoStatoPrenotazioneMandatoDTO body) {
+
+        Prenotazione prenotazione = this.findById(prenotazioneId);
+        
+        if (!EnumHelper.statoPrenotazioneEValido(body.statoPrenotazione())) {
+            throw new ValidazionePayloadException("Lo stato della prenotazione non esiste/non è valido.");
+        }
+        
+        prenotazione.setStatoPrenotazione(
+                StatoPrenotazione.valueOf(body.statoPrenotazione())
+        );
+        
+        return this.prenotazioniRepository.save(prenotazione);
+    }
+
+
 
     // public DipendenteDaMandareDTO aggiornaDipendente(Dipendente dipendente) {
     //     Dipendente dipendenteAggiornato = this.dipendentiRepository.save(dipendente);
     //     return new DipendenteDaMandareDTO(dipendenteAggiornato);
     // }
-
-
     //
     //
     // public Author delete(String authorIdStr) {

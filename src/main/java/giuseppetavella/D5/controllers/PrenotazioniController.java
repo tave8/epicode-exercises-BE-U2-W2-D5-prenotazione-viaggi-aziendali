@@ -6,6 +6,7 @@ import giuseppetavella.D5.entities.Prenotazione;
 import giuseppetavella.D5.exceptions.ValidazionePayloadException;
 import giuseppetavella.D5.payloads.in_request.NuovaPrenotazioneMandataDTO;
 import giuseppetavella.D5.payloads.in_request.NuovoDipendenteMandatoDTO;
+import giuseppetavella.D5.payloads.in_request.NuovoStatoPrenotazioneMandatoDTO;
 import giuseppetavella.D5.payloads.in_request.NuovoViaggioMandatoDTO;
 import giuseppetavella.D5.payloads.in_response.DipendenteDaMandareDTO;
 import giuseppetavella.D5.payloads.in_response.PrenotazioneDaMandareDTO;
@@ -70,10 +71,16 @@ public class PrenotazioniController {
 
 
 
-    // @PutMapping("/{authorId}")
-    // public Author update(@PathVariable String authorId, @RequestBody NewAuthorPayload body) {
-    //     return authorsService.update(authorId, body);
-    // }
+    @PatchMapping("/{prenotazioneId}")
+    public PrenotazioneDaMandareDTO aggiornaStatoPrenotazione(@PathVariable UUID prenotazioneId, 
+                                           @RequestBody NuovoStatoPrenotazioneMandatoDTO body) 
+    {
+    
+        Prenotazione prenotazioneAggiornata = this.prenotazioniService.aggiornaStatoPrenotazione(prenotazioneId, body);
+        return new PrenotazioneDaMandareDTO(prenotazioneAggiornata);
+    
+    }
+    
     //
     //
     // @DeleteMapping("/{authorId}")

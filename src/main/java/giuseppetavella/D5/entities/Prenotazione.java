@@ -1,6 +1,7 @@
 package giuseppetavella.D5.entities;
 
 import giuseppetavella.D5.enums.StatoPrenotazione;
+import giuseppetavella.D5.exceptions.NuovoStatoPrenotazioneNonValidoException;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -96,8 +97,21 @@ public class Prenotazione {
         return statoPrenotazione;
     }
 
-    public void setStatoPrenotazione(StatoPrenotazione statoPrenotazione) {
-        this.statoPrenotazione = statoPrenotazione;
+    public void setStatoPrenotazione(StatoPrenotazione statoPrenotazioneDesiderato) {
+        StatoPrenotazione statoPrenotazioneCorrente = this.getStatoPrenotazione();
+        
+        // se lo stato della prenotazione è già completato,
+        // non può essere fatta ritornare a in programma
+        if(statoPrenotazioneCorrente == StatoPrenotazione.COMPLETATO 
+                && statoPrenotazioneDesiderato == StatoPrenotazione.IN_PROGRAMMA) 
+        {
+            throw new NuovoStatoPrenotazioneNonValidoException(
+                    "stato corrente: " + statoPrenotazioneCorrente
+                            + " stato desiderato: " + statoPrenotazioneDesiderato
+            );
+        }
+        
+        this.statoPrenotazione = statoPrenotazioneDesiderato;
     }
 
     public Viaggio getViaggio() {

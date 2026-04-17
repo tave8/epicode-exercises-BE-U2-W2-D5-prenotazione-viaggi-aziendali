@@ -45,7 +45,12 @@ public class ErrorsHandler {
         String msg = "Prenotazione non disponibile. DETTAGLI: " + ex.getMessage();
         return new ErroriDaMandareDTO(msg);
     }
-    
+
+    @ExceptionHandler(NuovoStatoPrenotazioneNonValidoException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErroriDaMandareDTO handleNuovoStatoPrenotazioneNonValido(NuovoStatoPrenotazioneNonValidoException ex) {
+        return new ErroriDaMandareDTO(ex.getMessage());
+    }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -64,7 +69,8 @@ public class ErrorsHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErroriDaMandareDTO handleMaybeMissingBody(HttpMessageNotReadableException ex) {
-        String msg = "La richiesta non è ben formata; forse manca il body o i campi del body non sono ben formati?";
+        String msg = "La richiesta non è ben formata; forse manca il body, "
+                +"i campi del body non sono ben formati, o qualche valore categorico non viene soddisfatto (ENUM)?";
         return new ErroriDaMandareDTO(msg);
     }
 
@@ -81,7 +87,9 @@ public class ErrorsHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErroriDaMandareDTO handleRequestIsMissingPart(MissingServletRequestPartException ex) {
         String msg = "L'endpoint si aspetta che questa richiesta abbia qualche parte nel multipart, "
-                +"ma sembra che non ci sia. DETTAGLI: " + ex.getMessage();
+                +"ma sembra che non ci sia. Questo può capitare se stai cercando "
+                +"di caricare un file, o l'endpoint si aspetta che carichi un file? "
+                +"DETTAGLI: " + ex.getMessage();
         return new ErroriDaMandareDTO(msg);
     }
     
