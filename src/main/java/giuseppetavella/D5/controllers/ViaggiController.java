@@ -28,10 +28,10 @@ public class ViaggiController {
     private ViaggiService viaggiService;
 
 
-    // @GetMapping
-    // public List<DipendenteDaMandareDTO> findAll() {
-    //     return this.dipendentiService.findAll();
-    // }
+    @GetMapping
+    public List<ViaggioDaMandareDTO> findAll() {
+        return this.viaggiService.findAll();
+    }
 
     // @GetMapping("/{dipendenteId}")
     // public DipendenteDaMandareDTO findById(@PathVariable UUID dipendenteId) {

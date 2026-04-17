@@ -1,5 +1,6 @@
 package giuseppetavella.D5.entities;
 
+import giuseppetavella.D5.services.ViaggiService;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -14,10 +15,12 @@ public class Viaggio {
     private UUID viaggioId;
     
     @Column(nullable = false)
-    private final String destinazione;
+    private String destinazione;
     
     @Column(nullable = false)
-    private final String partenza;
+    private String partenza;
+    
+    protected Viaggio() {}
     
     public Viaggio(String destinazione, String partenza) {
         this.destinazione = destinazione;
